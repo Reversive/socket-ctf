@@ -33,7 +33,7 @@ char *flags[_CHALLENGE_AMOUNT] = {
     "fk3wfLCm3QvS",
     "too_easy",
     ".RUN_ME",
-    "falta_resolver"
+    "K5n2UFfpFMUN"
 };
 
 void challenge_register(char *challenge, char *question, challenge_func fn, char *flag) {
@@ -51,6 +51,39 @@ void bad_fd_challenge() {
     }
 }
 
+void kill_tracer() {
+    unsigned int pid = getpid();
+    char *format = "grep Tracer /proc/%d/status | cut -f 2";
+    char command[MAX_ANSWER_BUFFER];
+    sprintf(command, format, pid);
+    file_ptr out = popen(command, "r");
+    if(out == NULL) {
+        perror("popen");
+        exit(ERROR);
+    }
+    int tracer_pid = NO_TRACER;
+    fscanf(out, "%d", &tracer_pid);
+    fclose(out);
+    if(tracer_pid != NO_TRACER) kill(tracer_pid, SIGKILL);
+}
+
+void filter_error_challenge() {
+    kill_tracer();
+    time_t t;
+    srand((unsigned) time(&t));
+    int index = 0;
+    char *answer = "La respuesta es K5n2UFfpFMUN\n";
+    while(answer[index]) {
+        while(rand() % 100 <= 14) {
+            char c = answer[index++];
+            write(STDOUT_FILENO, &c, 1);
+            if(!answer[index]) return;
+        }
+        char c = (char)(rand() % 95 + 32);
+        write(STDERR_FILENO, &c, 1);
+    }
+}
+
 void challenge_setup() {
     challenge_register(challenges[_WELCOME], questions[_WELCOME], NULL, flags[_WELCOME]);
     challenge_register(challenges[_THE_WIRE], questions[_THE_WIRE], NULL, flags[_THE_WIRE]);
@@ -58,5 +91,5 @@ void challenge_setup() {
     challenge_register(challenges[_EBADF], questions[_EBADF], bad_fd_challenge, flags[_EBADF]);
     challenge_register(challenges[_STRINGS], questions[_STRINGS], NULL, flags[_STRINGS]);
     challenge_register(challenges[_SECTIONS], questions[_SECTIONS], NULL, flags[_SECTIONS]);
-    challenge_register(challenges[_FILTER], questions[_FILTER], NULL, flags[_FILTER]);
+    challenge_register(challenges[_FILTER], questions[_FILTER], filter_error_challenge, flags[_FILTER]);
 }

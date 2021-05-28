@@ -12,8 +12,8 @@
 #define DEFAULT_PROTOCOL 0
 #define PORT 8080
 #define BACKLOG 2
-enum code {ERROR = -1, SUCCESS = 0};
+
 typedef struct sockaddr *sockaddr_ptr;
-typedef FILE *file_ptr;
+
 void ctf(int fd);
 #endif

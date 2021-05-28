@@ -55,14 +55,14 @@ void ctf(int fd) {
 		exit(ERROR);
     }
 	challenge_setup();
-	int current_challenge = _WELCOME;
-	while (current_challenge != _LAST_CHALLENGE) {
-		printf("\033[1;1H\033[2J"); // https://stackoverflow.com/questions/4062045/clearing-terminal-in-linux-with-c-code
+	int challenge_index = _WELCOME;
+	while (challenge_index != _CHALLENGE_AMOUNT) {
+		printf("\033[1;1H\033[2J");
 		printf("------------- DESAFIO -------------\n");
-		printf("%s\n", challenge_table[current_challenge].challenge);
-		if(challenge_table[current_challenge].fn != NULL) challenge_table[current_challenge].fn();
+		printf("%s\n\n", challenge_table[challenge_index].challenge);
+		if(challenge_table[challenge_index].fn != NULL) challenge_table[challenge_index].fn();
 		printf("----- PREGUNTA PARA INVESTIGAR -----\n");
-		printf("%s\n", challenge_table[current_challenge].challenge_question);
+		printf("%s\n", challenge_table[challenge_index].challenge_question);
 
 		ssize_t characters_read = getline(&flag, &length, client_buffer);
 		if(characters_read == ERROR) {
@@ -70,7 +70,7 @@ void ctf(int fd) {
 			exit(ERROR);
 		}
 		flag[characters_read - 1] = NULL_TERMINATOR;
-		current_challenge += check_flag(current_challenge, flag);
+		challenge_index += check_flag(challenge_index, flag);
 	}
 	printf("\033[1;1H\033[2J");
     printf("Fin\n");
