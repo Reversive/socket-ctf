@@ -14,6 +14,7 @@ char *challenges[_CHALLENGE_AMOUNT] = {
     "respuesta = strings:39",
     ".data .bss .comment ? .shstrtab .symtab .strtab",
     "Filter error",
+    "¿?",
 };
 
 char *questions[_CHALLENGE_AMOUNT] = {
@@ -24,6 +25,7 @@ char *questions[_CHALLENGE_AMOUNT] = {
     "¿Cómo garantiza TCP que los paquetes llegan en orden y no se pierden?",
     "Un servidor suele crear un nuevo proceso o thread para atender las conexiones entrantes. ¿Qué conviene más?",
     "¿Cómo se puede implementar un servidor que atienda muchas conexiones sin usar procesos ni threads?",
+    "¿Qué aplicaciones se pueden utilizar para ver el tráfico por la red?",
 };
 
 char *flags[_CHALLENGE_AMOUNT] = {
@@ -33,7 +35,8 @@ char *flags[_CHALLENGE_AMOUNT] = {
     "fk3wfLCm3QvS",
     "too_easy",
     ".RUN_ME",
-    "K5n2UFfpFMUN"
+    "K5n2UFfpFMUN",
+    "BUmyYq5XxXGt"
 };
 
 void challenge_register(char *challenge, char *question, challenge_func fn, char *flag) {
@@ -84,6 +87,12 @@ void filter_error_challenge() {
     }
 }
 
+void black_bg_challenge() {
+    printf("\e[30;40m");
+    printf("La respuesta es BUmyYq5XxXGt\n");
+    printf("\e[0m");
+}
+
 void challenge_setup() {
     challenge_register(challenges[_WELCOME], questions[_WELCOME], NULL, flags[_WELCOME]);
     challenge_register(challenges[_THE_WIRE], questions[_THE_WIRE], NULL, flags[_THE_WIRE]);
@@ -92,4 +101,5 @@ void challenge_setup() {
     challenge_register(challenges[_STRINGS], questions[_STRINGS], NULL, flags[_STRINGS]);
     challenge_register(challenges[_SECTIONS], questions[_SECTIONS], NULL, flags[_SECTIONS]);
     challenge_register(challenges[_FILTER], questions[_FILTER], filter_error_challenge, flags[_FILTER]);
+    challenge_register(challenges[_BG_BLACK], questions[_BG_BLACK], black_bg_challenge, flags[_BG_BLACK]);
 }

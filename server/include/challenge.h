@@ -31,9 +31,10 @@ typedef enum index_challenges {
     _EBADF,
     _STRINGS,
     _SECTIONS,
-    _FILTER
+    _FILTER,
+    _BG_BLACK
 } challenge_et;
-#define _LAST_CHALLENGE _FILTER
+#define _LAST_CHALLENGE _BG_BLACK
 #define _CHALLENGE_AMOUNT (_LAST_CHALLENGE + 1)
 
 extern challenge_ts challenge_table[_CHALLENGE_AMOUNT];
