@@ -9,11 +9,11 @@ SERVER_OUT=server
 all: $(SERVER_OUT) bin_move
 
 
-$(SERVER_OUT) : $(OBJECTS) 
+$(SERVER_OUT) : $(OBJECTS) -lm
 
 
 %.o: %.c
-	$(GCC) $(GCCFLAGS) -I./include -c $< -o $@
+	$(GCC) $(GCCFLAGS) -I./include -c $< -o $@ 
 	mkdir -p bin
 
 bin_move:

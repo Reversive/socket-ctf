@@ -1,5 +1,6 @@
 #include "include/server.h"
 
+
 int main(int argc, char *argv[]) {
     int socket_fd, connection_fd;
     socket_fd = socket(AF_INET, SOCK_STREAM, DEFAULT_PROTOCOL);
@@ -38,7 +39,12 @@ int main(int argc, char *argv[]) {
 }
 
 int check_flag(challenge_et current_challenge, char *flag) {
-	if(strcmp(challenge_table[current_challenge].challenge_flag, flag) != SUCCESS) {
+	char conversion[SMALL_BUFFER_SIZE];
+	if(md5(flag, conversion) == ERROR) {
+		perror("popen");
+		exit(ERROR);
+	}
+	if(strcmp(challenge_table[current_challenge].challenge_flag, conversion) != SUCCESS) {
 		printf("Respuesta incorrecta: %s\n", flag);
 		sleep(RETRY_SLEEP);
 		return 0;
@@ -47,6 +53,7 @@ int check_flag(challenge_et current_challenge, char *flag) {
 }
 
 void ctf(int fd) {
+	
     char *flag;
     size_t length = 0;
     file_ptr client_buffer = fdopen(fd, "w+");
@@ -73,5 +80,7 @@ void ctf(int fd) {
 		challenge_index += check_flag(challenge_index, flag);
 	}
 	printf("\033[1;1H\033[2J");
-    printf("Fin\n");
+	printf("The end.\n");
+	curious_easter_egg();
+	exit(SUCCESS);
 }

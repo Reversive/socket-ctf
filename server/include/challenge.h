@@ -3,24 +3,26 @@
 #include <string.h>
 #include <unistd.h> 
 #include <time.h>
+#include "crypt.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <signal.h>
+#include <math.h>
 #define BAD_CHALLENGE -1
-#define RETRY_SLEEP 3
+#define RETRY_SLEEP 2
 #define NONE 0
 typedef void (*challenge_func)(void);
 typedef FILE *file_ptr;
-#define MAX_CHALLENGE_BUFFER 4096
-#define MAX_ANSWER_BUFFER 128
-#define BAD_FD 100
+#define BIG_BUFFER_SIZE 4096
+
+#define BAD_FD 13
 #define NO_TRACER 0
-enum code {ERROR = -1, SUCCESS = 0};
+
 
 typedef struct {
-    char challenge[MAX_CHALLENGE_BUFFER];
-    char challenge_question[MAX_CHALLENGE_BUFFER];
-    char challenge_flag[MAX_ANSWER_BUFFER];
+    char challenge[BIG_BUFFER_SIZE];
+    char challenge_question[BIG_BUFFER_SIZE];
+    char challenge_flag[SMALL_BUFFER_SIZE];
     challenge_func fn;
 } challenge_ts;
 
@@ -32,12 +34,17 @@ typedef enum index_challenges {
     _STRINGS,
     _SECTIONS,
     _FILTER,
-    _BG_BLACK
+    _BG_BLACK,
+    _LATEX,
+    _QUINE,
+    _GDBME,
+    _NORMAL
 } challenge_et;
-#define _LAST_CHALLENGE _BG_BLACK
+#define _LAST_CHALLENGE _NORMAL
 #define _CHALLENGE_AMOUNT (_LAST_CHALLENGE + 1)
 
 extern challenge_ts challenge_table[_CHALLENGE_AMOUNT];
 void challenge_register(char *challenge, char *question, challenge_func fn, char *flag);
 void challenge_setup();
+void curious_easter_egg();
 #endif
