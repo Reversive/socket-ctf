@@ -9,3 +9,9 @@ $ make all
 ```
 $ make clean
 ```
+## Instructions
+If you want to run both server and client in the same shell execute:
+```
+$ ./run.sh
+```
+else just run client and server in separate terminals.
